@@ -10,7 +10,7 @@ const collabSchema = new mongoose.Schema({
     description:{
         type: String,
         required: [true, "Please provide required collabration description"],
-        minLength: [50,"Title must contain atlest 50 characters"],
+        minLength: [3,"Title must contain atlest 50 characters"],
         maxLength: [250, "Title cannot exceed 250 characters"],
     },
     category:{

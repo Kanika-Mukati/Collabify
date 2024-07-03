@@ -2,18 +2,36 @@ import { catchAsyncError } from "../middlewares/catchAsyncError.js";
 import  ErrorHandler from "../middlewares/error.js";
 import { Collab} from "../models/collabSchema.js";
 
+// export const getAllCollabs = catchAsyncError(async (req, res, next) => {
+//     const Collabs = await Collab.find({expired: false});
+//     res.status(200).json({
+//         success: true,
+//         Collabs,
+//     });
+// });
+
+///extraaa
 export const getAllCollabs = catchAsyncError(async (req, res, next) => {
-    const collabs = await Collab.find({expired: false});
+    const {  country, city, expired } = req.query;
+    // category,
+    const filterCriteria = {
+        // ...(category),
+        ...(country && { country }),
+        ...(city && { city }),
+        ...(expired !== undefined && { expired: expired === 'false' }),
+    };
+
+    const Collabs = await Collab.find(filterCriteria);
     res.status(200).json({
         success: true,
-        collabs,
+        Collabs,
     });
 });
 
 export const postCollabs = catchAsyncError(async(req, res ,next)=> {
     const {role} = req.user;
     if(role === "Influencer"){
-        return next(new ErrorHandler("Collabration seeker is not allowed to access this resources!", 
+        return next(new ErrorHandler("Collab seeker is not allowed to access this resources!", 
         400
     )
 );
@@ -49,7 +67,7 @@ export const postCollabs = catchAsyncError(async(req, res ,next)=> {
     }
 
     const postedBy = req.user._id;
-    const collab = await Collab.create({
+    const Collabs = await Collab.create({
         title, 
         description,
         category,
@@ -65,24 +83,24 @@ export const postCollabs = catchAsyncError(async(req, res ,next)=> {
 
     res.status(200).json({
         sucess: true,
-        message: "collabration post posted successfully",
-        collab
+        message: "Collab post posted successfully",
+        Collabs
     });
 });
 
 export const getmyCollabs = catchAsyncError(async(req, res, next) =>{
     const {role} = req.user;
     if(role === "Influencer"){
-        return next(new ErrorHandler("Collabration seeker is not allowed to access this resources!", 
+        return next(new ErrorHandler("Collab seeker is not allowed to access this resources!", 
         400
     )
   );
  }
 
- const mycollabs = await Collab.find({postedBy: req.user._id});
+ const myCollabs = await Collab.find({postedBy: req.user._id});
  res.status(200).json ({
     success: true,
-    mycollabs
+    myCollabs
  });
 });
 
@@ -92,15 +110,15 @@ export const updatePost = catchAsyncError(async(req, res, next)=> {
     if(role === "Influencer"){
         return next(
             new ErrorHandler(
-                "Collabration seeker is not allowed to access this resources!", 
+                "Collab seeker is not allowed to access this resources!", 
                 400
     )
   );
  }
 
  const {id} = req.params;
- let collab = await Collab.findById(id);
- if(!collab){
+ let Collabs = await Collab.findById(id);
+ if(!Collabs){
     return next(
         new ErrorHandler(
             "OOPS!! Collab not found", 
@@ -108,14 +126,14 @@ export const updatePost = catchAsyncError(async(req, res, next)=> {
         )
     );
  }
- collab = await Collab.findByIdAndUpdate(id, req.body, {
+ Collabs = await Collab.findByIdAndUpdate(id, req.body, {
     new : true,
     runValidators: true,
     useFindAndModify: false
  })
  res.status(200).json({
     success: true,
-    collab,
+    Collabs,
     message: "Post updated successfully",
  });
 });
@@ -125,15 +143,15 @@ export const deletePost = catchAsyncError(async(req, res, next)=> {
     if(role === "Influencer"){
         return next(
             new ErrorHandler(
-                "Collabration seeker is not allowed to access this resources!", 
+                "Collab seeker is not allowed to access this resources!", 
                 400
     )
   );
  }
 
  const {id} = req.params;
- let collab = await Collab.findById(id);
- if(!collab){
+ let Collabs = await Collab.findById(id);
+ if(!Collabs){
     return next(
         new ErrorHandler(
             "OOPS!! Collab not found", 
@@ -142,7 +160,7 @@ export const deletePost = catchAsyncError(async(req, res, next)=> {
     );
  }
 
- await Collab.deleteOne();
+ await Collabs.deleteOne();
  res.status(200).json ({
     sucess: true,
     message: "Post deleted successfully"
@@ -153,13 +171,13 @@ export const getSinglePost = catchAsyncError(async(req, res , next)=> {
     const {id} = req.params;
 
     try {
-        const collab = await Collab.findById(id);
-        if(!collab){
+        const Collabs = await Collab.findById(id);
+        if(!Collabs){
             return next(new ErrorHandler("This post not found", 404));
         }
         res.status(200).json({
             success: true,
-            collab,
+            Collabs,
         })
     } catch (error) {
       return next(new ErrorHandler("Invalid ID/CastError"))  
