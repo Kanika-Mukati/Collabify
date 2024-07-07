@@ -111,7 +111,7 @@ const Collabration = () => {
             <label
               style={{ textAlign: "start", display: "block", fontSize: "20px" }}
             >
-              Select Resume
+              Select InfluenceBio
             </label>
             <input
               type="file"

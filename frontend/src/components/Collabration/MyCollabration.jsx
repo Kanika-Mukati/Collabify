@@ -70,7 +70,7 @@ const MyCollabrations = () => {
   return (
     <section className="my_collabrations page">
       {user && user.role === "Influencer" ? (
-        <div className="container">
+        <div className="collabResume container">
           <h3>My Collabrations</h3>
           {collabrations.length <= 0 ? (
             <>
@@ -91,7 +91,7 @@ const MyCollabrations = () => {
           )}
         </div>
       ) : (
-        <div className="container">
+        <div className="collabResume container">
           <h3>Collabrations From Collab Seekers</h3>
           {collabrations.length <= 0 ? (
             <>
