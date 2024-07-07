@@ -59,7 +59,7 @@ export const postCollabration = catchAsyncError(async(req, res, next) => {
     }
 
     if(! req.files || Object.keys(req.files).length === 0){
-        return next(new ErrorHandler("Resume file required"));
+        return next(new ErrorHandler("InfluenceBio file required"));
     }
 
     const {resume} = req.files;

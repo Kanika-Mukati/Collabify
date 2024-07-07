@@ -1,6 +1,7 @@
 import { catchAsyncError } from "../middlewares/catchAsyncError.js";
 import  ErrorHandler from "../middlewares/error.js";
 import { Collab} from "../models/collabSchema.js";
+import {User} from "../models/userSchema.js";
 
 // export const getAllCollabs = catchAsyncError(async (req, res, next) => {
 //     const Collabs = await Collab.find({expired: false});
@@ -9,6 +10,9 @@ import { Collab} from "../models/collabSchema.js";
 //         Collabs,
 //     });
 // });
+
+
+
 
 ///extraaa
 export const getAllCollabs = catchAsyncError(async (req, res, next) => {
@@ -183,3 +187,5 @@ export const getSinglePost = catchAsyncError(async(req, res , next)=> {
       return next(new ErrorHandler("Invalid ID/CastError"))  
     }
 })
+
+
